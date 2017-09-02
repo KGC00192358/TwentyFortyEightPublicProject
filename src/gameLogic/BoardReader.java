@@ -65,6 +65,7 @@ public class BoardReader
 		}
 		return exp;
 	}
+	
 
 	/**
 	 * This makes a guess at a southern move. it functionally works the same way
@@ -273,7 +274,23 @@ public class BoardReader
 		}
 		return -1;
 	}
-	public int getCurrentBoardValue(int[][] a)
+	/**
+	 * This returns a value that is related to the numbers on the board and the amount of free space.
+	 * Since the total value of all the non-zero numbers increases by two every turn, I needed some other way to 
+	 * calculate which board states were more valuable.
+	 * I decided to multiple the total number value of a given board by the number of free spaces, which increases more if you free up space by combining numbers
+	 * (if you align two numbers, that go into a single space, thereby negating the space taken up by the two so there is a net change of 0 free spaces.
+	 * so for a board with a 2 and a 2 on the bottom row, its value is (2+2)*(16-2) = 56, then is you move the twos to the left you get a board of 4 on the 
+	 * bottom and a two in any spot so the value is (4+2)*(16-2) = 84, however if you move the twos up[not combining] you have a new board value of (2+2+2)*(16-3) = 78)
+	 * following this logic, we should be able to determine a "best move" by picking the one which results in a higher board value.
+	 * Keep in mind, this does not account for boards like [4][2][0][2] because an up or down move would yield the highest board value (8+4+2+2)(16-4) = 192 
+	 * 													   [0][0][0][0] however one move to the right gives the board a value of (4+4+4+2+2)(16-5) = 154
+	 * 													   [4][2][0][0]	   but that board        [0][0][4][4] and is 4moves away from a value of ()	 			     										                                                 [0][0][0][0]
+	 * 													   [0][0][0][0]    looks like this       [0][2][0][0] (16 + 2 + 2 + 2 + 2)(16-4)
+	 * @param a an array that is a copy of the board being operated on                           [0][0][4][2]
+	 * @return                                                                                   [0][0][0][0]
+	 */
+	private int getCurrentBoardValue(int[][] a)
 	{
 		int boardValue = 0;
 		int blanks = 0;
@@ -292,6 +309,8 @@ public class BoardReader
 		return boardValue;		
 	}
 	
+	
+	/*
 	public int getCurrentBoardValue(GameBoard b)
 	{
 		int[][] a = new int[b.getPlayArea().length][b.getPlayArea().length];
@@ -318,5 +337,5 @@ public class BoardReader
 		boardValue= boardValue*blanks;
 		return boardValue;		
 	}
-
+	*/
 }

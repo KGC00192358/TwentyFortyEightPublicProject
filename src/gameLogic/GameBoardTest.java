@@ -267,5 +267,37 @@ public class GameBoardTest
 		int actual = b.checkForWinLose();
 		assertEquals(expected, actual);
 	}
-
+	
+	////////////////
+	//WEIRD BOARDS//
+	////////////////
+	@Test
+	public void testWestMovementForBugOnWeirdBoard() {
+		GameBoard b = new GameBoard();
+		b. clearBoard();
+		b.setPlayArea(0, 2, 4);
+		b.setPlayArea(0, 3, 4);
+		b.setPlayArea(2, 2, 4);
+		b.setPlayArea(2, 3, 2);
+		b.setPlayArea(1, 1, 2);
+		System.out.println("init");
+	    b.printBoard();
+		b.moveNumbersWest();
+		System.out.println("after");
+	    b.printBoard();
+		int topWestExpected = 8;
+		int secondTopWestExpected = 2;
+		int thirdTopWestExpected = 2;
+		int thirdTopThirdWestExpected = 4;
+		int topWestActual = b.getPlayArea()[0][3];
+		int secondTopWestActual = b.getPlayArea()[1][3];;
+		int thirdTopWestActual = b.getPlayArea()[2][3];;
+		int thirdTopThirdWestActual = b.getPlayArea()[2][2];;
+		assertEquals(topWestExpected, topWestActual);
+		assertEquals(secondTopWestExpected, secondTopWestActual);
+		assertEquals(thirdTopWestExpected, thirdTopWestActual);
+		assertEquals(thirdTopThirdWestExpected, thirdTopThirdWestActual);
+	}
+	
+	
 }

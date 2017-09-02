@@ -184,18 +184,19 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					if (findFarthestFreeOrEqualBlockInRow(i, j, WEST) == -1)
+					int freeval = findFarthestFreeOrEqualBlockInRow(i, j, WEST);
+					if (freeval == -1)
 					{
 						break;
 					}
-					if (findFarthestFreeOrEqualBlockInRow(i, j, WEST) >= 6)
+					if (freeval >= 6)
 					{
-						playArea[i][(findFarthestFreeOrEqualBlockInRow(i, j, WEST) / 6)] = playArea[i][j] * 2;
+						playArea[i][(freeval / 6)] = playArea[i][j] * 2;
 						playArea[i][j] = 0;
 
-					} else if (findFarthestFreeOrEqualBlockInRow(i, j, WEST) < 6)
+					} else if (freeval < 6)
 					{
-						playArea[i][findFarthestFreeOrEqualBlockInRow(i, j, WEST)] = playArea[i][j];
+						playArea[i][freeval] = playArea[i][j];
 						playArea[i][j] = 0;
 					}
 				}
@@ -227,7 +228,7 @@ public class GameBoard
 				{
 					return i;
 				}
-				if (playArea[a][b] == playArea[i][b])
+				if (i != b && playArea[a][b] == playArea[i][b])
 				{
 					return i * 6;
 				}
@@ -239,7 +240,7 @@ public class GameBoard
 			{
 				return i;
 			}
-			if (playArea[a][b] == playArea[i][b])
+			if ( i != b && playArea[a][b] == playArea[i][b])
 			{
 				return (i + 1) * 6;
 			}
@@ -268,19 +269,19 @@ public class GameBoard
 				{
 					return i;
 				}
-				if (playArea[a][i] == playArea[a][b])
+				if (i != b && playArea[a][i] == playArea[a][b])
 				{
 					return (i + 1) * 6;
 				}
 			}
 		}
-		for (int i = playArea[a].length - 1; i >= 1; i--)
+		for (int i = playArea[a].length - 1; i > 0; i--)
 		{
 			if (playArea[a][i] == 0)
 			{
 				return i;
 			}
-			if (playArea[a][i] == playArea[a][b])
+			if ( i != b && playArea[a][i] == playArea[a][b] )
 			{
 				return (i) * 6;
 			}

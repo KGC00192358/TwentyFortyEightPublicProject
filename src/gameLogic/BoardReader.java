@@ -6,6 +6,10 @@ package gameLogic;
  * @version 0.0.1 This class allows me to easily read the current board state,
  *          as well as make a best guess as to what a board will look like after
  *          a given move.
+ * 
+ *          In the interest of simplifying my code, any method here that is
+ *          intended to be called outside of this class thats a GameBoard
+ *          object, while internal methods take an array[][]
  */
 public class BoardReader
 {
@@ -52,7 +56,7 @@ public class BoardReader
 			guessMoveNumbersEast(exp);
 			break;
 		case 2:
-			guessMoveNumbersSouth(exp);
+			guessMoveNumbersNorth(exp);
 			break;
 		case 3:
 			guessMoveNumbersWest(exp);
@@ -72,7 +76,7 @@ public class BoardReader
 	 *            the array to be operated on
 	 */
 
-	public void guessMoveNumbersSouth(int[][] a)
+	private void guessMoveNumbersSouth(int[][] a)
 	{
 		for (int i = a.length - 2; i >= 0; i--)
 		{
@@ -109,7 +113,7 @@ public class BoardReader
 	 * @param a
 	 *            the array to be operated on
 	 */
-	public void guessMoveNumbersNorth(int[][] a)
+	private void guessMoveNumbersNorth(int[][] a)
 	{
 		for (int i = 1; i < a.length; i++)
 		{
@@ -136,7 +140,7 @@ public class BoardReader
 		}
 	}
 
-	public void guessMoveNumbersEast(int[][] a)
+	private void guessMoveNumbersEast(int[][] a)
 	{
 		for (int i = 0; i < a.length; i++)
 		{
@@ -150,20 +154,14 @@ public class BoardReader
 					}
 					if (findFarthestFreeOrEqualBlockInRow(a, i, j, EAST) >= 6)
 					{
-						a[i][(findFarthestFreeOrEqualBlockInRow(a, i, j, EAST) / 6) - 1] = a[i][j] * 2;
-						a[i][j] = 0;
-
-					} else if (findFarthestFreeOrEqualBlockInRow(a, i, j, EAST) < 6)
-					{
-						a[i][findFarthestFreeOrEqualBlockInRow(a, i, j, EAST)] = a[i][j];
-						a[i][j] = 0;
+						a[i][(findFarthestFreeOrEqualBlockInRow(a, i, j, EAST) / 6) - 1] = a[i][j] * 2;															
 					}
 				}
 			}
 		}
 	}
 
-	public void guessMoveNumbersWest(int[][] a)
+	private void guessMoveNumbersWest(int[][] a)
 	{
 		for (int i = 0; i < a.length; i++)
 		{
@@ -204,7 +202,7 @@ public class BoardReader
 	 *         the number
 	 * 
 	 */
-	public int findFarthestFreeOrEqualBlockInColumn(int[][] v, int a, int b, int dir)
+	private int findFarthestFreeOrEqualBlockInColumn(int[][] v, int a, int b, int dir)
 	{
 		if (dir == 0)
 		{
@@ -246,7 +244,7 @@ public class BoardReader
 	 *            direction of scan
 	 * @return the index of free block by row position or -1
 	 */
-	public int findFarthestFreeOrEqualBlockInRow(int[][] v, int a, int b, int dir)
+	private int findFarthestFreeOrEqualBlockInRow(int[][] v, int a, int b, int dir)
 	{
 		if (dir == 1)
 		{
@@ -274,6 +272,51 @@ public class BoardReader
 			}
 		}
 		return -1;
+	}
+	public int getCurrentBoardValue(int[][] a)
+	{
+		int boardValue = 0;
+		int blanks = 0;
+		for (int i = 0; i < a.length; i++)
+		{
+			for (int j = 0; j < a[j].length; j++)
+			{
+				boardValue = +a[i][j];
+				if (a[i][j] == 0)
+				{
+					blanks++;
+				}
+			}
+		}
+		boardValue= boardValue*blanks;
+		return boardValue;		
+	}
+	
+	public int getCurrentBoardValue(GameBoard b)
+	{
+		int[][] a = new int[b.getPlayArea().length][b.getPlayArea().length];
+		for (int i = 0; i < a.length; i++)
+		{
+			for (int j = 0; j < a[j].length; j++)
+			{
+				a[i][j] = b.getPlayArea()[i][j];
+			}
+		}
+		int boardValue = 0;
+		int blanks = 0;
+		for (int i = 0; i < a.length; i++)
+		{
+			for (int j = 0; j < a[j].length; j++)
+			{
+				boardValue = +a[i][j];
+				if (a[i][j] == 0)
+				{
+					blanks++;
+				}
+			}
+		}
+		boardValue= boardValue*blanks;
+		return boardValue;		
 	}
 
 }

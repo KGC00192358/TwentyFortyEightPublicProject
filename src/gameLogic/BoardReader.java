@@ -50,16 +50,16 @@ public class BoardReader
 		switch (dir)
 		{
 		case 0:
-			guessMoveNumbersSouth(exp);
+			exp = guessMoveNumbersSouth(exp);
 			break;
 		case 1:
-			guessMoveNumbersEast(exp);
+			exp = guessMoveNumbersEast(exp);
 			break;
 		case 2:
-			guessMoveNumbersNorth(exp);
+			exp = guessMoveNumbersNorth(exp);
 			break;
 		case 3:
-			guessMoveNumbersWest(exp);
+			exp = guessMoveNumbersWest(exp);
 			break;
 
 		}
@@ -77,7 +77,7 @@ public class BoardReader
 	 *            the array to be operated on
 	 */
 
-	private void guessMoveNumbersSouth(int[][] a)
+	private int[][] guessMoveNumbersSouth(int[][] a)
 	{
 		for (int i = a.length - 2; i >= 0; i--)
 		{
@@ -103,6 +103,7 @@ public class BoardReader
 				}
 			}
 		}
+		return a;
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class BoardReader
 	 * @param a
 	 *            the array to be operated on
 	 */
-	private void guessMoveNumbersNorth(int[][] a)
+	private int[][] guessMoveNumbersNorth(int[][] a)
 	{
 		for (int i = 1; i < a.length; i++)
 		{
@@ -139,9 +140,10 @@ public class BoardReader
 				}
 			}
 		}
+		return a;
 	}
 
-	private void guessMoveNumbersEast(int[][] a)
+	private int[][] guessMoveNumbersEast(int[][] a)
 	{
 		for (int i = 0; i < a.length; i++)
 		{
@@ -160,9 +162,10 @@ public class BoardReader
 				}
 			}
 		}
+		return a;
 	}
 
-	private void guessMoveNumbersWest(int[][] a)
+	private int[][] guessMoveNumbersWest(int[][] a)
 	{
 		for (int i = 0; i < a.length; i++)
 		{
@@ -187,6 +190,7 @@ public class BoardReader
 				}
 			}
 		}
+		return a;
 	}
 
 	/**
@@ -290,7 +294,7 @@ public class BoardReader
 	 * @param a an array that is a copy of the board being operated on                           [0][0][4][2]
 	 * @return                                                                                   [0][0][0][0]
 	 */
-	private int getCurrentBoardValue(int[][] a)
+	public int getCurrentBoardValue(int[][] a)
 	{
 		int boardValue = 0;
 		int blanks = 0;
@@ -310,7 +314,7 @@ public class BoardReader
 	}
 	
 	
-	/*
+	
 	public int getCurrentBoardValue(GameBoard b)
 	{
 		int[][] a = new int[b.getPlayArea().length][b.getPlayArea().length];
@@ -337,5 +341,5 @@ public class BoardReader
 		boardValue= boardValue*blanks;
 		return boardValue;		
 	}
-	*/
+	
 }

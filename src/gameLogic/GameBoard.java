@@ -53,23 +53,23 @@ public class GameBoard
 
 	/**
 	 * Adds a two to a place on the game board, if it fails to find a spot,
-	 * spits out negative 1. TODO: make this actually random, this is too
-	 * formulaic for the intent of this project.
+	 * spits out negative 1. TODO: make this more efficient;
 	 */
 	public int addTwo()
 	{
-		for (int i = 0; i < playArea.length; i++)
+		boolean empty = true;
+		while (empty)
 		{
-			for (int j = 0; j < playArea.length; j++)
+			int a = (int) Math.random() * 3;
+			int b = (int) Math.random() * 3;
+			if (playArea[a][b] < 2)
 			{
-				if (playArea[i][j] == 0)
-				{
-					playArea[i][j] = 2;
-					return 1;
-				}
-
+				playArea[a][b] = 2;
+				empty = false;
+				return 1;
 			}
 		}
+
 		return -1;
 
 	}
@@ -87,18 +87,19 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					if (findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH) == -1)
+					int freeVal = findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH);
+					if (freeVal == -1)
 					{
 						break;
 					}
-					if (findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH) >= 6)
+					if (freeVal >= 6)
 					{
-						playArea[(findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH) / 6)][j] = playArea[i][j] * 2;
+						playArea[(freeVal / 6)][j] = playArea[i][j] * 2;
 						playArea[i][j] = 0;
 
-					} else if (findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH) < 6)
+					} else if (freeVal < 6)
 					{
-						playArea[findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH)][j] = playArea[i][j];
+						playArea[freeVal][j] = playArea[i][j];
 						playArea[i][j] = 0;
 					}
 
@@ -120,18 +121,19 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					if (findFarthestFreeOrEqualBlockInColumn(i, j, NORTH) == -1)
+					int freeVal = findFarthestFreeOrEqualBlockInColumn(i, j, NORTH);
+					if (freeVal == -1)
 					{
 						break;
 					}
-					if (findFarthestFreeOrEqualBlockInColumn(i, j, NORTH) >= 6)
+					if (freeVal >= 6)
 					{
-						playArea[(findFarthestFreeOrEqualBlockInColumn(i, j, NORTH) / 6) - 1][j] = playArea[i][j] * 2;
+						playArea[(freeVal / 6) - 1][j] = playArea[i][j] * 2;
 						playArea[i][j] = 0;
 
-					} else if (findFarthestFreeOrEqualBlockInColumn(i, j, NORTH) < 6)
+					} else if (freeVal < 6)
 					{
-						playArea[findFarthestFreeOrEqualBlockInColumn(i, j, NORTH)][j] = playArea[i][j];
+						playArea[freeVal][j] = playArea[i][j];
 						playArea[i][j] = 0;
 					}
 				}
@@ -144,7 +146,7 @@ public class GameBoard
 	 * available block in that row multiply by 2 as necessary
 	 * 
 	 */
-	public void moveNumbersEast()
+	public void moveNumbersWest()
 	{
 		for (int i = 0; i < playArea.length; i++)
 		{
@@ -152,18 +154,19 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					if (findFarthestFreeOrEqualBlockInRow(i, j, EAST) == -1)
+					int freeVal = findFarthestFreeOrEqualBlockInRow(i, j, EAST);
+					if (freeVal == -1)
 					{
 						break;
 					}
-					if (findFarthestFreeOrEqualBlockInRow(i, j, EAST) >= 6)
+					if (freeVal >= 6)
 					{
-						playArea[i][(findFarthestFreeOrEqualBlockInRow(i, j, EAST) / 6) - 1] = playArea[i][j] * 2;
+						playArea[i][(freeVal / 6) - 1] = playArea[i][j] * 2;
 						playArea[i][j] = 0;
 
-					} else if (findFarthestFreeOrEqualBlockInRow(i, j, EAST) < 6)
+					} else if (freeVal < 6)
 					{
-						playArea[i][findFarthestFreeOrEqualBlockInRow(i, j, EAST)] = playArea[i][j];
+						playArea[i][freeVal] = playArea[i][j];
 						playArea[i][j] = 0;
 					}
 				}
@@ -176,7 +179,7 @@ public class GameBoard
 	 * available block in that row multiply by 2 as necessary
 	 * 
 	 */
-	public void moveNumbersWest()
+	public void moveNumbersEast()
 	{
 		for (int i = 0; i < playArea.length; i++)
 		{
@@ -224,11 +227,11 @@ public class GameBoard
 		{
 			for (int i = 3; i > 0; i--)
 			{
-				if (playArea[i][b] == 0)
+				if (playArea[i][b] == 0 && columnIsClear(a, b, i, b, SOUTH))
 				{
 					return i;
 				}
-				if (i != b && playArea[a][b] == playArea[i][b])
+				if (i != a && playArea[a][b] == playArea[i][b] && columnIsClear(a, b, i, b, SOUTH))
 				{
 					return i * 6;
 				}
@@ -236,11 +239,11 @@ public class GameBoard
 		}
 		for (int i = 0; i < playArea.length - 1; i++)
 		{
-			if (playArea[i][b] == 0)
+			if (playArea[i][b] == 0 && columnIsClear(a, b, i, b, NORTH))
 			{
 				return i;
 			}
-			if ( i != b && playArea[a][b] == playArea[i][b])
+			if (i != a && playArea[a][b] == playArea[i][b] && columnIsClear(a, b, i, b, NORTH))
 			{
 				return (i + 1) * 6;
 			}
@@ -265,11 +268,12 @@ public class GameBoard
 		{
 			for (int i = 0; i < playArea[a].length; i++)
 			{
-				if (playArea[a][i] == 0)
+				boolean clear = rowIsClear(a, b, a, i, EAST);
+				if (playArea[a][i] == 0 && clear)
 				{
 					return i;
 				}
-				if (i != b && playArea[a][i] == playArea[a][b])
+				if (i != b && playArea[a][i] == playArea[a][b] && clear)
 				{
 					return (i + 1) * 6;
 				}
@@ -277,16 +281,65 @@ public class GameBoard
 		}
 		for (int i = playArea[a].length - 1; i > 0; i--)
 		{
-			if (playArea[a][i] == 0)
+			boolean clear = rowIsClear(a, b, a, i, WEST);
+			if (playArea[a][i] == 0 && clear)
 			{
 				return i;
 			}
-			if ( i != b && playArea[a][i] == playArea[a][b] )
+			if (i != b && playArea[a][i] == playArea[a][b] && clear)
 			{
 				return (i) * 6;
 			}
 		}
 		return -1;
+	}
+
+	public boolean rowIsClear(int curA, int curB, int tarA, int tarB, int dir)
+	{
+		if (dir == EAST)
+		{
+			for (int i = curB + 1; i < tarB; i++)
+			{
+				if (playArea[curA][i] != 0)
+				{
+					return false;
+				}
+			}
+		} else 
+		{
+			for (int i = curB - 1; i > tarB; i--)
+			{
+				if (playArea[curA][i] != 0)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean columnIsClear(int curA, int curB, int tarA, int tarB, int dir)
+	{
+		if (dir == SOUTH)
+		{
+			for (int i = curA + 1; i < tarA; i++)
+			{
+				if (playArea[i][curB] != 0)
+				{
+					return false;
+				}
+			}
+		} else
+		{
+			for (int i = curA - 1; i > tarA; i--)
+			{
+				if (playArea[i][curB] != 0)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public void printBoard()
@@ -318,8 +371,11 @@ public class GameBoard
 	 * Checks for win/lose conditions
 	 * 
 	 * @return 1, 0, or -1 depending on if there is a block == 2048(1 win), no
-	 *         block with 2048 but still space(0), or no space and no 2048(-1
+	 *         block with 2048 but still space(0), there is no space, but a
+	 *         single move in some direction will clear up at least one space,
+	 *         or no space no 2048, and no single move will clear a space(-1
 	 *         lose).
+	 * 
 	 */
 	public int checkForWinLose()
 	{
@@ -331,6 +387,7 @@ public class GameBoard
 					return 1;
 			}
 		}
+
 		for (int i = 0; i < playArea.length; i++)
 		{
 			for (int j = 0; j < playArea[i].length; j++)
@@ -339,6 +396,102 @@ public class GameBoard
 					return 0;
 			}
 		}
+
+		int[][] orginal = new int[4][4]; // this looks disgusting, but it allows
+											// me to keep the original order of
+											// the playArea intact
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				orginal[i][j] = playArea[i][j];
+			}
+		}
+
+		/*
+		 * again, this is disgusting but it seems like the easiest way to do
+		 * this without rewriting the entire board reader class. this moves the
+		 * playArea in a direction, checks if the resulting board has space, and
+		 * then resets it to the original position.
+		 * 
+		 */
+
+		moveNumbersSouth();
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				if (playArea[i][j] == 0)
+					return 0;
+			}
+		}
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				playArea[i][j] = orginal[i][j];
+			}
+		}
+
+		moveNumbersNorth();
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				if (playArea[i][j] == 0)
+					return 0;
+			}
+		}
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				playArea[i][j] = orginal[i][j];
+			}
+		}
+
+		moveNumbersWest();
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				if (playArea[i][j] == 0)
+					return 0;
+			}
+		}
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				playArea[i][j] = orginal[i][j];
+			}
+		}
+
+		moveNumbersEast();
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				if (playArea[i][j] == 0)
+					return 0;
+			}
+		}
+
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				playArea[i][j] = orginal[i][j];
+			}
+		}
+
 		return -1;
 	}
 }

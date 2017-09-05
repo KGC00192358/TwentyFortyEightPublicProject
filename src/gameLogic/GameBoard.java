@@ -16,10 +16,10 @@ public class GameBoard
 	/**
 	 * Constants(easy direction)
 	 */
-	private int NORTH = 2;
-	private int SOUTH = 0;
-	private int WEST = 3;
-	private int EAST = 1;
+	private final int NORTH = 2;
+	private final int SOUTH = 0;
+	private final int WEST = 3;
+	private final int EAST = 1;
 
 	/**
 	 * Constructor
@@ -227,11 +227,12 @@ public class GameBoard
 		{
 			for (int i = 3; i > 0; i--)
 			{
-				if (playArea[i][b] == 0 && columnIsClear(a, b, i, b, SOUTH))
+				boolean clear = columnIsClear(a, b, i, b, SOUTH);
+				if (playArea[i][b] == 0 && clear)
 				{
 					return i;
 				}
-				if (i != a && playArea[a][b] == playArea[i][b] && columnIsClear(a, b, i, b, SOUTH))
+				if (i != a && playArea[a][b] == playArea[i][b] && clear)
 				{
 					return i * 6;
 				}
@@ -305,7 +306,7 @@ public class GameBoard
 					return false;
 				}
 			}
-		} else 
+		} else
 		{
 			for (int i = curB - 1; i > tarB; i--)
 			{
@@ -317,11 +318,12 @@ public class GameBoard
 		}
 		return true;
 	}
-	
+
 	public boolean columnIsClear(int curA, int curB, int tarA, int tarB, int dir)
 	{
-		if (dir == SOUTH)
+		switch (dir)
 		{
+		case SOUTH:
 			for (int i = curA + 1; i < tarA; i++)
 			{
 				if (playArea[i][curB] != 0)
@@ -329,8 +331,8 @@ public class GameBoard
 					return false;
 				}
 			}
-		} else
-		{
+			break;
+		case NORTH:
 			for (int i = curA - 1; i > tarA; i--)
 			{
 				if (playArea[i][curB] != 0)
@@ -338,6 +340,7 @@ public class GameBoard
 					return false;
 				}
 			}
+			break;
 		}
 		return true;
 	}

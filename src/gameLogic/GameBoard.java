@@ -87,22 +87,46 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					int freeVal = findFarthestFreeOrEqualBlockInColumn(i, j, SOUTH);
-					if (freeVal == -1)
+					boolean moved = false;
+					int lastFree = -1;
+					int lastEqual = -1;
+					for (int testColumn = i + 1; testColumn < playArea.length; testColumn++)
 					{
-						break;
+						if (testColumn == 3)
+						{
+							if (playArea[testColumn][j] == playArea[i][j] && (lastFree > -1 || testColumn == i + 1))
+							{
+								playArea[testColumn][j] = 2 * playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							} else if (playArea[testColumn][j] == 0 && (lastFree > -1 || testColumn == i + 1))
+							{
+								playArea[testColumn][j] = playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							}
+						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1 ))
+						{
+							lastFree = testColumn;
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1)) {
+							lastEqual = testColumn;
+						}
 					}
-					if (freeVal >= 6)
+					if (!moved)
 					{
-						playArea[(freeVal / 6)][j] = playArea[i][j] * 2;
-						playArea[i][j] = 0;
-
-					} else if (freeVal < 6)
-					{
-						playArea[freeVal][j] = playArea[i][j];
-						playArea[i][j] = 0;
+						if (lastFree != -1 && lastFree > lastEqual)
+						{
+							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else if (lastFree != -1 && lastEqual > lastFree)
+						{
+							playArea[lastEqual][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else // no move {
+							moved = true;
 					}
-
 				}
 			}
 		}
@@ -121,21 +145,47 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					int freeVal = findFarthestFreeOrEqualBlockInColumn(i, j, NORTH);
-					if (freeVal == -1)
+					boolean moved = false;
+					int lastFree = -1;
+					int lastEqual = -1;
+					for (int testColumn = i - 1; testColumn > -1; testColumn--)
 					{
-						break;
+						if (testColumn == 0)
+						{
+							if (playArea[testColumn][j] == playArea[i][j] && (lastFree > -1 || testColumn == i - 1))
+							{
+								playArea[testColumn][j] = 2 * playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							} else if (playArea[testColumn][j] == 0 && (lastFree > -1 || testColumn == i - 1))
+							{
+								playArea[testColumn][j] = playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							}
+						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1 ))
+						{
+							lastFree = testColumn;
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1)) {
+							lastEqual = testColumn;
+						}
 					}
-					if (freeVal >= 6)
+					if (!moved)
 					{
-						playArea[(freeVal / 6) - 1][j] = playArea[i][j] * 2;
-						playArea[i][j] = 0;
-
-					} else if (freeVal < 6)
-					{
-						playArea[freeVal][j] = playArea[i][j];
-						playArea[i][j] = 0;
+						if (lastFree != -1 && lastFree > lastEqual)
+						{
+							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else if (lastFree != -1 && lastEqual > lastFree)
+						{
+							playArea[lastFree][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else // no move {
+							moved = true;
 					}
+					
 				}
 			}
 		}
@@ -154,20 +204,47 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					int freeVal = findFarthestFreeOrEqualBlockInRow(i, j, EAST);
-					if (freeVal == -1)
+					boolean moved = false;
+					int lastFree = -1;
+					int lastEqual = -1;
+					for(int testRow = j - 1; j > -1; j--) 
 					{
-						break;
+						if (testRow == 0)
+						{
+							if(playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1))
+							{
+								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i - 1)) 
+							{
+								
+								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							}
+						}
+						else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i - 1 ))
+						{
+							lastFree = testRow;
+						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1)) {
+							lastEqual = testRow;
+						}	
 					}
-					if (freeVal >= 6)
+					if (!moved)
 					{
-						playArea[i][(freeVal / 6) - 1] = playArea[i][j] * 2;
-						playArea[i][j] = 0;
-
-					} else if (freeVal < 6)
-					{
-						playArea[i][freeVal] = playArea[i][j];
-						playArea[i][j] = 0;
+						if (lastFree != -1 && lastFree > lastEqual)
+						{
+							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else if (lastFree != -1 && lastEqual > lastFree)
+						{
+							playArea[lastFree][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else // no move {
+							moved = true;
 					}
 				}
 			}
@@ -187,20 +264,47 @@ public class GameBoard
 			{
 				if (playArea[i][j] > 0)
 				{
-					int freeval = findFarthestFreeOrEqualBlockInRow(i, j, WEST);
-					if (freeval == -1)
+					boolean moved = false;
+					int lastFree = -1;
+					int lastEqual = -1;
+					for(int testRow = j + 1; j < playArea.length; j++) 
 					{
-						break;
+						if (testRow == 0)
+						{
+							if(playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i + 1))
+							{
+								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i + 1)) 
+							{
+								
+								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][j] = 0;
+								moved = true;
+							}
+						}
+						else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i + 1 ))
+						{
+							lastFree = testRow;
+						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1)) {
+							lastEqual = testRow;
+						}	
 					}
-					if (freeval >= 6)
+					if (!moved)
 					{
-						playArea[i][(freeval / 6)] = playArea[i][j] * 2;
-						playArea[i][j] = 0;
-
-					} else if (freeval < 6)
-					{
-						playArea[i][freeval] = playArea[i][j];
-						playArea[i][j] = 0;
+						if (lastFree != -1 && lastFree > lastEqual)
+						{
+							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else if (lastFree != -1 && lastEqual > lastFree)
+						{
+							playArea[lastFree][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							moved = true;
+						} else // no move {
+							moved = true;
 					}
 				}
 			}
@@ -299,7 +403,8 @@ public class GameBoard
 	{
 		if (dir == EAST)
 		{
-			for (int i = curB + 1; i < tarB; i++)
+			for (int i = curB; i <= tarB - 1; i++) // this make sure that the
+													// check runs at least once.
 			{
 				if (playArea[curA][i] != 0)
 				{
@@ -308,7 +413,7 @@ public class GameBoard
 			}
 		} else
 		{
-			for (int i = curB - 1; i > tarB; i--)
+			for (int i = curB; i > tarB; i--)
 			{
 				if (playArea[curA][i] != 0)
 				{
@@ -324,7 +429,7 @@ public class GameBoard
 		switch (dir)
 		{
 		case SOUTH:
-			for (int i = curA + 1; i < tarA; i++)
+			for (int i = curA; i <= tarA; i++)
 			{
 				if (playArea[i][curB] != 0)
 				{

@@ -68,7 +68,10 @@ public class GameBoardTest
 		GameBoard b = new GameBoard();
 		b.setPlayArea(3, 0, 2);
 		b.setPlayArea(0, 0, 0);
+		b.printBoard();
 		b.moveNumbersNorth();
+		System.out.println("north test");
+		b.printBoard();
 		b.setPlayArea(3, 0, 2);
 		int topExpected = 2;
 		int topActual = b.getPlayArea()[0][0];
@@ -367,8 +370,9 @@ public class GameBoardTest
 		b.setPlayArea(3, 1, 2);
 		b.setPlayArea(3, 2, 4);
 		b.setPlayArea(3, 3, 2);
+		b.printBoard();
 		boolean expected  = false;
-		boolean actual = b.columnIsClear(0, 0, 3, 0, SOUTH);
+		boolean actual = b.columnIsClear(0, 0, 0, 3, SOUTH);
 		assertEquals(expected, actual);
 	
 	}
@@ -429,6 +433,7 @@ public class GameBoardTest
 		b.setPlayArea(3, 3, 2);
 		System.out.println("before south");
 		b.printBoard();
+		boolean column = b.rowIsClear(0, 0, 0, 3, SOUTH);
 		b.moveNumbersSouth();
 		System.out.println("after");
 		b.printBoard();

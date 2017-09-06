@@ -105,10 +105,11 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1 ))
+						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1))
 						{
 							lastFree = testColumn;
-						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1)) {
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1))
+						{
 							lastEqual = testColumn;
 						}
 					}
@@ -163,10 +164,11 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1 ))
+						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1))
 						{
 							lastFree = testColumn;
-						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1)) {
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1))
+						{
 							lastEqual = testColumn;
 						}
 					}
@@ -185,7 +187,7 @@ public class GameBoard
 						} else // no move {
 							moved = true;
 					}
-					
+
 				}
 			}
 		}
@@ -207,40 +209,40 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
-					for(int testRow = j - 1; j > -1; j--) 
+					for (int testRow = j - 1; testRow > -1; testRow--)
 					{
 						if (testRow == 0)
 						{
-							if(playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1))
+							if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j - 1))
 							{
-								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][testRow] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
 								moved = true;
-							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i - 1)) 
+							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
 							{
-								
-								playArea[i][testRow]  = 2*playArea[i][j];
+
+								playArea[i][testRow] = playArea[i][j];
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						}
-						else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i - 1 ))
+						} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
 						{
 							lastFree = testRow;
-						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1)) {
+						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j - 1))
+						{
 							lastEqual = testRow;
-						}	
+						}
 					}
 					if (!moved)
 					{
 						if (lastFree != -1 && lastFree > lastEqual)
 						{
-							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][lastFree] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
 						} else if (lastFree != -1 && lastEqual > lastFree)
 						{
-							playArea[lastFree][j] = 2 * playArea[i][j];
+							playArea[i][lastFree] = 2 * playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
 						} else // no move {
@@ -267,187 +269,50 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
-					for(int testRow = j + 1; j < playArea.length; j++) 
+					for (int testRow = j + 1; testRow < playArea.length; testRow++)
 					{
-						if (testRow == 0)
+						if (testRow == 3)
 						{
-							if(playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i + 1))
+							if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j + 1))
 							{
-								playArea[i][testRow]  = 2*playArea[i][j];
+								playArea[i][testRow] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
 								moved = true;
-							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i + 1)) 
+							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
 							{
-								
-								playArea[i][testRow]  = 2*playArea[i][j];
+
+								playArea[i][testRow] = playArea[i][j];
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						}
-						else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == i + 1 ))
+						} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
 						{
 							lastFree = testRow;
-						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == i - 1)) {
+						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j + 1))
+						{
 							lastEqual = testRow;
-						}	
+						}
 					}
 					if (!moved)
 					{
 						if (lastFree != -1 && lastFree > lastEqual)
 						{
-							playArea[lastFree][j] = playArea[i][j];
+							playArea[i][lastFree] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
 						} else if (lastFree != -1 && lastEqual > lastFree)
 						{
-							playArea[lastFree][j] = 2 * playArea[i][j];
+							playArea[i][lastEqual] = 2 * playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
-						} else // no move {
+						} else
+						{
 							moved = true;
+						}
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Scans the column of a given block and finds the farthest open or equal
-	 * block in the given direction
-	 * 
-	 * @param a
-	 *            the row
-	 * @param b
-	 *            the Column
-	 * @param dir
-	 *            the direction of scan
-	 * @return the index of the second array(column position) where we will move
-	 *         the number
-	 * 
-	 */
-	public int findFarthestFreeOrEqualBlockInColumn(int a, int b, int dir)
-	{
-		if (dir == SOUTH)
-		{
-			for (int i = 3; i > 0; i--)
-			{
-				boolean clear = columnIsClear(a, b, i, b, SOUTH);
-				if (playArea[i][b] == 0 && clear)
-				{
-					return i;
-				}
-				if (i != a && playArea[a][b] == playArea[i][b] && clear)
-				{
-					return i * 6;
-				}
-			}
-		}
-		for (int i = 0; i < playArea.length - 1; i++)
-		{
-			if (playArea[i][b] == 0 && columnIsClear(a, b, i, b, NORTH))
-			{
-				return i;
-			}
-			if (i != a && playArea[a][b] == playArea[i][b] && columnIsClear(a, b, i, b, NORTH))
-			{
-				return (i + 1) * 6;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * 
-	 * @param a
-	 *            the row
-	 * @param b
-	 *            the column
-	 * @param dir
-	 *            the direction of scan
-	 * @return the index of the free block by column position, or negative 1 if
-	 *         no move is possible
-	 */
-	public int findFarthestFreeOrEqualBlockInRow(int a, int b, int dir)
-	{
-		if (dir == EAST)
-		{
-			for (int i = 0; i < playArea[a].length; i++)
-			{
-				boolean clear = rowIsClear(a, b, a, i, EAST);
-				if (playArea[a][i] == 0 && clear)
-				{
-					return i;
-				}
-				if (i != b && playArea[a][i] == playArea[a][b] && clear)
-				{
-					return (i + 1) * 6;
-				}
-			}
-		}
-		for (int i = playArea[a].length - 1; i > 0; i--)
-		{
-			boolean clear = rowIsClear(a, b, a, i, WEST);
-			if (playArea[a][i] == 0 && clear)
-			{
-				return i;
-			}
-			if (i != b && playArea[a][i] == playArea[a][b] && clear)
-			{
-				return (i) * 6;
-			}
-		}
-		return -1;
-	}
-
-	public boolean rowIsClear(int curA, int curB, int tarA, int tarB, int dir)
-	{
-		if (dir == EAST)
-		{
-			for (int i = curB; i <= tarB - 1; i++) // this make sure that the
-													// check runs at least once.
-			{
-				if (playArea[curA][i] != 0)
-				{
-					return false;
-				}
-			}
-		} else
-		{
-			for (int i = curB; i > tarB; i--)
-			{
-				if (playArea[curA][i] != 0)
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	public boolean columnIsClear(int curA, int curB, int tarA, int tarB, int dir)
-	{
-		switch (dir)
-		{
-		case SOUTH:
-			for (int i = curA; i <= tarA; i++)
-			{
-				if (playArea[i][curB] != 0)
-				{
-					return false;
-				}
-			}
-			break;
-		case NORTH:
-			for (int i = curA - 1; i > tarA; i--)
-			{
-				if (playArea[i][curB] != 0)
-				{
-					return false;
-				}
-			}
-			break;
-		}
-		return true;
 	}
 
 	public void printBoard()

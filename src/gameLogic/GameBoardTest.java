@@ -331,7 +331,10 @@ public class GameBoardTest
 		b. clearBoard();
 		b.setPlayArea(1, 0, 4);
 		b.setPlayArea(2, 0, 2);
+		b.printBoard();
 		b.moveNumbersNorth();
+		System.out.println("");
+		b.printBoard();
 		int topExpected = 4;
 		int secondTopExpected = 2;
 		int topActual = b.getPlayArea()[0][0];
@@ -475,5 +478,52 @@ public class GameBoardTest
 		assertEquals(expected, actual);
 	}
 	
-	
+	@Test
+	public void moveBottomRowWest() {
+		GameBoard b = new GameBoard();
+		b.clearBoard();
+		b.setPlayArea(3, 0, 2);
+		b.setPlayArea(3, 1, 2);
+		b.setPlayArea(3, 2, 2);
+		b.setPlayArea(3, 3, 2);
+		System.out.println("init");
+		b.printBoard();
+		b.moveNumbersWest();
+		System.out.println("final");
+		b.printBoard();
+		assertEquals(4, b.getPlayArea()[3][0]);
+		assertEquals(4, b.getPlayArea()[3][1]);
+		
+	}
+	@Test
+	public void moveBottomRowEastCheckForComboBug() {
+		GameBoard b = new GameBoard();
+		b.clearBoard();
+		b.setPlayArea(3, 0, 4);
+		b.setPlayArea(3, 1, 2);
+		b.setPlayArea(3, 2, 2);
+		System.out.println("init");
+		b.printBoard();
+		b.moveNumbersEast();
+		System.out.println("final");
+		b.printBoard();
+		assertEquals(4, b.getPlayArea()[3][3]);
+		assertEquals(4, b.getPlayArea()[3][2]);
+	}
+	@Test
+	public void stillWeirdBugsForFullLine(){
+		GameBoard b = new GameBoard();
+		b.clearBoard();
+		b.setPlayArea(3, 0, 2);
+		b.setPlayArea(3, 1, 4);
+		b.setPlayArea(3, 3, 2);
+		System.out.println("init");
+		b.printBoard();
+		b.moveNumbersEast();
+		System.out.println("final");
+		b.printBoard();
+		assertEquals(2, b.getPlayArea()[3][3]);
+		assertEquals(4, b.getPlayArea()[3][2]);
+		assertEquals(2, b.getPlayArea()[3][1]);
+	}
 }

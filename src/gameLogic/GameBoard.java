@@ -1,6 +1,8 @@
 
 package gameLogic;
 
+import java.util.Random;
+
 /**
  * 
  * @author Kevin Conyers
@@ -13,13 +15,6 @@ public class GameBoard
 	 * Fields
 	 */
 	private int[][] playArea = new int[4][4];
-	/**
-	 * Constants(easy direction)
-	 */
-	private final int NORTH = 2;
-	private final int SOUTH = 0;
-	private final int WEST = 3;
-	private final int EAST = 1;
 
 	/**
 	 * Constructor
@@ -60,8 +55,12 @@ public class GameBoard
 		boolean empty = true;
 		while (empty)
 		{
-			int a = (int) Math.random() * 3;
-			int b = (int) Math.random() * 3;
+			Random r = new Random();
+			int Low = 0;
+			int High = 4;
+			// int Result = r.nextInt(High-Low) + Low;
+			int a = (int) r.nextInt(High - Low) + Low;
+			int b = (int) r.nextInt(High - Low) + Low;
 			if (playArea[a][b] < 2)
 			{
 				playArea[a][b] = 2;
@@ -81,6 +80,12 @@ public class GameBoard
 	 */
 	public void moveNumbersSouth()
 	{
+		boolean[][] multiplied =
+		{
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false } };
 		for (int i = playArea.length - 2; i >= 0; i--)
 		{
 			for (int j = playArea.length - 1; j >= 0; j--)
@@ -90,14 +95,27 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
+					boolean clear = true;
 					for (int testColumn = i + 1; testColumn < playArea.length; testColumn++)
 					{
+						if(playArea[testColumn][j] != 0 && testColumn < 3){
+							clear = false;
+						}
+						if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1))
+						{
+							lastFree = testColumn;
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1))
+						{
+							lastEqual = testColumn;
+						}
 						if (testColumn == 3)
 						{
-							if (playArea[testColumn][j] == playArea[i][j] && (lastFree > -1 || testColumn == i + 1))
+							if (playArea[testColumn][j] == playArea[i][j]
+									&& (lastFree == lastEqual - 1 || testColumn == i + 1) && !multiplied[testColumn][j])
 							{
 								playArea[testColumn][j] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
+								multiplied[testColumn][j] = true;
 								moved = true;
 							} else if (playArea[testColumn][j] == 0 && (lastFree > -1 || testColumn == i + 1))
 							{
@@ -105,24 +123,19 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1))
-						{
-							lastFree = testColumn;
-						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1))
-						{
-							lastEqual = testColumn;
-						}
+						} 
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastFree > lastEqual)
-						{
-							playArea[lastFree][j] = playArea[i][j];
-							playArea[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
+						if (lastFree != -1 && lastEqual > lastFree && !multiplied[lastEqual][j])
 						{
 							playArea[lastEqual][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							multiplied[lastEqual][j] = true;
+							moved = true;
+						} else if (lastFree != -1)
+						{
+							playArea[lastFree][j] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
 						} else // no move {
@@ -140,6 +153,12 @@ public class GameBoard
 	 */
 	public void moveNumbersNorth()
 	{
+		boolean[][] multiplied =
+		{
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false } };
 		for (int i = 1; i < playArea.length; i++)
 		{
 			for (int j = 0; j < playArea[i].length; j++)
@@ -149,14 +168,27 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
+					boolean clear = true;
 					for (int testColumn = i - 1; testColumn > -1; testColumn--)
 					{
+						if(playArea[testColumn][j] != 0 && testColumn > 0) {
+							clear = false;
+						}
+						if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1))
+						{
+							lastFree = testColumn;
+						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1))
+						{
+							lastEqual = testColumn;
+						}
 						if (testColumn == 0)
 						{
-							if (playArea[testColumn][j] == playArea[i][j] && (lastFree > -1 || testColumn == i - 1))
+							if (playArea[testColumn][j] == playArea[i][j]
+									&& (lastFree == lastEqual + 1 || testColumn == i - 1) && !multiplied[testColumn][j])
 							{
 								playArea[testColumn][j] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
+								multiplied[testColumn][j] = true;
 								moved = true;
 							} else if (playArea[testColumn][j] == 0 && (lastFree > -1 || testColumn == i - 1))
 							{
@@ -164,30 +196,26 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1))
-						{
-							lastFree = testColumn;
-						} else if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1))
-						{
-							lastEqual = testColumn;
-						}
+						} 
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastFree > lastEqual)
+						if (lastFree != -1 && lastEqual < lastFree && lastEqual > -1 && !multiplied[lastEqual][j])
+						{
+							playArea[lastEqual][j] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							multiplied[lastEqual][j] = true;
+							moved = true;
+						} else if (lastFree != -1)
 						{
 							playArea[lastFree][j] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
+						} else
 						{
-							playArea[lastFree][j] = 2 * playArea[i][j];
-							playArea[i][j] = 0;
 							moved = true;
-						} else // no move {
-							moved = true;
+						}
 					}
-
 				}
 			}
 		}
@@ -200,6 +228,12 @@ public class GameBoard
 	 */
 	public void moveNumbersWest()
 	{
+		boolean[][] multiplied =
+		{
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false } };
 		for (int i = 0; i < playArea.length; i++)
 		{
 			for (int j = 1; j < playArea[i].length; j++)
@@ -209,14 +243,27 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
+					boolean clear = true;
 					for (int testRow = j - 1; testRow > -1; testRow--)
 					{
+						if (playArea[i][testRow] != 0 && testRow > 0){
+							clear = false;
+						}
+						if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
+						{
+							lastFree = testRow;
+						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j - 1))
+						{
+							lastEqual = testRow;
+						}
 						if (testRow == 0)
 						{
-							if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j - 1))
+							if (playArea[i][testRow] == playArea[i][j]
+									&& (lastFree == lastEqual + 1 || testRow == j - 1) && !multiplied[i][testRow])
 							{
 								playArea[i][testRow] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
+								multiplied[i][testRow] = true;
 								moved = true;
 							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
 							{
@@ -225,28 +272,25 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
-						{
-							lastFree = testRow;
-						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j - 1))
-						{
-							lastEqual = testRow;
 						}
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastFree > lastEqual)
+						if (lastFree != -1 && lastEqual < lastFree && lastEqual > -1 && !multiplied[i][lastEqual])
+						{
+							playArea[i][lastEqual] = 2 * playArea[i][j];
+							playArea[i][j] = 0;
+							multiplied[i][lastEqual] = true;
+							moved = true;
+						} else if (lastFree != -1) 
 						{
 							playArea[i][lastFree] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
+						} else // no move
 						{
-							playArea[i][lastFree] = 2 * playArea[i][j];
-							playArea[i][j] = 0;
 							moved = true;
-						} else // no move {
-							moved = true;
+						}
 					}
 				}
 			}
@@ -260,6 +304,12 @@ public class GameBoard
 	 */
 	public void moveNumbersEast()
 	{
+		boolean[][] multiplied =
+		{
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false },
+				{ false, false, false, false } };
 		for (int i = 0; i < playArea.length; i++)
 		{
 			for (int j = playArea[i].length - 2; j > -1; j--)
@@ -269,14 +319,27 @@ public class GameBoard
 					boolean moved = false;
 					int lastFree = -1;
 					int lastEqual = -1;
+					boolean clear = true;
 					for (int testRow = j + 1; testRow < playArea.length; testRow++)
 					{
+						if (playArea[i][testRow] != 0 && testRow < 3) {
+							clear = false;
+						}
+						if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
+						{
+							lastFree = testRow;
+						} else if (playArea[i][testRow] == playArea[i][j] && ((lastFree != -1 && clear) || testRow == j + 1))
+						{
+							lastEqual = testRow;
+						}
 						if (testRow == 3)
 						{
-							if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j + 1))
+							if (playArea[i][testRow] == playArea[i][j]
+									&& (lastFree == lastEqual + 1 || testRow == j + 1) && !multiplied[i][testRow])
 							{
 								playArea[i][testRow] = 2 * playArea[i][j];
 								playArea[i][j] = 0;
+								multiplied[i][testRow] = true;
 								moved = true;
 							} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
 							{
@@ -285,24 +348,19 @@ public class GameBoard
 								playArea[i][j] = 0;
 								moved = true;
 							}
-						} else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
-						{
-							lastFree = testRow;
-						} else if (playArea[i][testRow] == playArea[i][j] && (lastFree != -1 || testRow == j + 1))
-						{
-							lastEqual = testRow;
-						}
+						} 
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastFree > lastEqual)
-						{
-							playArea[i][lastFree] = playArea[i][j];
-							playArea[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
+						if (lastFree != -1 && lastEqual > lastFree && !multiplied[i][lastEqual])
 						{
 							playArea[i][lastEqual] = 2 * playArea[i][j];
+							multiplied[i][lastEqual] = true;
+							playArea[i][j] = 0;
+							moved = true;
+						} else if (lastFree != -1)
+						{
+							playArea[i][lastFree] = playArea[i][j];
 							playArea[i][j] = 0;
 							moved = true;
 						} else
@@ -340,6 +398,19 @@ public class GameBoard
 		}
 	}
 
+	public int[][] copyBoard()
+	{
+		int[][] copy = new int[4][4];
+		for (int i = 0; i < playArea.length; i++)
+		{
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				copy[i][j] = playArea[i][j];
+			}
+		}
+		return copy;
+	}
+
 	/**
 	 * Checks for win/lose conditions
 	 * 
@@ -370,16 +441,9 @@ public class GameBoard
 			}
 		}
 
-		int[][] orginal = new int[4][4]; // this looks disgusting, but it allows
-											// me to keep the original order of
-											// the playArea intact
-		for (int i = 0; i < playArea.length; i++)
-		{
-			for (int j = 0; j < playArea[i].length; j++)
-			{
-				orginal[i][j] = playArea[i][j];
-			}
-		}
+		int[][] orginal = copyBoard(); // this looks disgusting, but it allows
+										// me to keep the original order of
+										// the playArea intact
 
 		/*
 		 * again, this is disgusting but it seems like the easiest way to do

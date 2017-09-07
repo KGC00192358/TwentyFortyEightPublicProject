@@ -127,7 +127,7 @@ public class GameBoard
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastEqual > lastFree && !multiplied[lastEqual][j])
+						if ((lastFree != -1 && lastEqual > lastFree || lastEqual == i + 1) && !multiplied[lastEqual][j])
 						{
 							playArea[lastEqual][j] = 2 * playArea[i][j];
 							playArea[i][j] = 0;
@@ -352,7 +352,7 @@ public class GameBoard
 					}
 					if (!moved)
 					{
-						if (lastFree != -1 && lastEqual > lastFree && !multiplied[i][lastEqual])
+						if ((lastFree != -1 && lastEqual > lastFree || lastEqual == j + 1) && !multiplied[i][lastEqual])
 						{
 							playArea[i][lastEqual] = 2 * playArea[i][j];
 							multiplied[i][lastEqual] = true;
@@ -384,6 +384,21 @@ public class GameBoard
 			System.out.println();
 
 		}
+	}
+	
+	public String[] toStringArray()
+	{
+		String[] board = new String[4];
+		for (int i = 0; i < playArea.length; i++)
+		{
+			String line = "";
+			for (int j = 0; j < playArea[i].length; j++)
+			{
+				line += ("[   " + Integer.toString(playArea[i][j]) + "   ]");
+			}
+			board[i] = line;
+		}
+		return board;
 	}
 
 	public void clearBoard()

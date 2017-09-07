@@ -516,14 +516,14 @@ public class GameBoardTest
 		b.clearBoard();
 		b.setPlayArea(3, 0, 2);
 		b.setPlayArea(3, 1, 4);
-		b.setPlayArea(3, 3, 2);
+		b.setPlayArea(3, 2, 2);
 		System.out.println("init");
 		b.printBoard();
-		b.moveNumbersEast();
+		b.moveNumbersWest();
 		System.out.println("final");
 		b.printBoard();
-		assertEquals(2, b.getPlayArea()[3][3]);
-		assertEquals(4, b.getPlayArea()[3][2]);
-		assertEquals(2, b.getPlayArea()[3][1]);
+		assertEquals(2, b.getPlayArea()[3][0]);
+		assertEquals(4, b.getPlayArea()[3][1]);
+		assertEquals(2, b.getPlayArea()[3][2]);
 	}
 }

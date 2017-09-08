@@ -425,6 +425,16 @@ public class GameBoard
 		}
 		return copy;
 	}
+	public void restoreBoard(int[][] org)
+    {
+        for (int i = 0; i < playArea.length; i++)
+        {
+            for (int j = 0; j < playArea[i].length; j++)
+            {
+                playArea[i][j] = org[i][j];
+            }
+        }
+    }
 
 	/**
 	 * Checks for win/lose conditions
@@ -546,4 +556,5 @@ public class GameBoard
 
 		return -1;
 	}
+
 }

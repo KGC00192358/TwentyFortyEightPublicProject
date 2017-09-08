@@ -52,281 +52,39 @@ public class BoardReader
 	 */
 	public int scanExpectedValue(GameBoard b, int dir)
 	{
+		int[][] org = b.copyBoard();
 		int[][] exp = b.copyBoard();
 		switch (dir)
 		{
 		case 0:
-			exp = guessMoveNumbersSouth(exp);
-			addTwo(exp);
+			b.moveNumbersSouth();
+			b.addTwo();
+			exp = b.copyBoard();
+			b.restoreBoard(org);
 			return getCurrentBoardValue(exp);
 		case 1:
-			exp = guessMoveNumbersEast(exp);
-			addTwo(exp);
+			b.moveNumbersEast();
+			b.addTwo();
+			exp = b.copyBoard();
+			b.restoreBoard(org);
 			return getCurrentBoardValue(exp);
 		case 2:
-			exp = guessMoveNumbersNorth(exp);
-			addTwo(exp);
+			b.moveNumbersNorth();
+			b.addTwo();
+			exp = b.copyBoard();
+			b.restoreBoard(org);
 			return getCurrentBoardValue(exp);
 		case 3:
-			exp = guessMoveNumbersWest(exp);
-			addTwo(exp);
+			b.moveNumbersWest();
+			b.addTwo();
+			exp = b.copyBoard();
+			b.restoreBoard(org);
 			return getCurrentBoardValue(exp);
 
 		}
 		return -1;
 	}
-	
-
-	/**
-	 * This makes a guess at a southern move. it functionally works the same way
-	 * as the actual moveSouth method, except it does not call addTwo() and it
-	 * works on a given array (copy of a). this is just to allow the computer a
-	 * way to guess what the board impact of a move would be
-	 * 
-	 * @param a
-	 *            the array to be operated on
-	 */
-	public int[][] guessMoveNumbersSouth(int[][] a)
-	{
-		for (int i = a.length - 2; i >= 0; i--)
-		{
-			for (int j = a.length - 1; j >= 0; j--)
-			{
-				if (a[i][j] > 0)
-				{
-					boolean moved = false;
-					int lastFree = -1;
-					int lastEqual = -1;
-					for (int testColumn = i + 1; testColumn < a.length; testColumn++)
-					{
-						if (testColumn == 3)
-						{
-							if (a[testColumn][j] == a[i][j] && (lastFree > -1 || testColumn == i + 1))
-							{
-								a[testColumn][j] = 2 * a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							} else if (a[testColumn][j] == 0 && (lastFree > -1 || testColumn == i + 1))
-							{
-								a[testColumn][j] = a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							}
-						} else if (a[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1))
-						{
-							lastFree = testColumn;
-						} else if (a[testColumn][j] == a[i][j] && (lastFree != -1 || testColumn == i + 1))
-						{
-							lastEqual = testColumn;
-						}
-					}
-					if (!moved)
-					{
-						if (lastFree != -1 && lastEqual == -1)
-						{
-							a[lastFree][j] = a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
-						{
-							a[lastEqual][j] = 2 * a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else // no move {
-							moved = true;
-					}
-				}
-			}
-		}
-		return a;
-	}
-
-	/**
-	 * Scans all numbers starting at the second row moves them into the farthest
-	 * available block on the board in their column multiplies by 2 as necessary
-	 * 
-	 */
-	public int[][] guessMoveNumbersNorth(int[][] a)
-	{
-		for (int i = 1; i < a.length; i++)
-		{
-			for (int j = 0; j < a[i].length; j++)
-			{
-				if (a[i][j] > 0)
-				{
-					boolean moved = false;
-					int lastFree = -1;
-					int lastEqual = -1;
-					for (int testColumn = i - 1; testColumn > -1; testColumn--)
-					{
-						if (testColumn == 0)
-						{
-							if (a[testColumn][j] == a[i][j] && (lastFree > -1 || testColumn == i - 1))
-							{
-								a[testColumn][j] = 2 * a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							} else if (a[testColumn][j] == 0 && (lastFree > -1 || testColumn == i - 1))
-							{
-								a[testColumn][j] = a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							}
-						} else if (a[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1))
-						{
-							lastFree = testColumn;
-						} else if (a[testColumn][j] == a[i][j] && (lastFree != -1 || testColumn == i - 1))
-						{
-							lastEqual = testColumn;
-						}
-					}
-					if (!moved)
-					{
-						if (lastFree != -1 && lastEqual == -1)
-						{
-							a[lastFree][j] = a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual < lastFree)
-						{
-							a[lastEqual][j] = 2 * a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else // no move {
-							moved = true;
-					}
-
-				}
-			}
-		}
-		return a;
-	}
-
-	/**
-	 * scans all columns starting from the second moves them to farthest
-	 * available block in that row multiply by 2 as necessary
-	 * 
-	 */
-	public int[][] guessMoveNumbersWest(int[][] a)
-	{
-		for (int i = 0; i < a.length; i++)
-		{
-			for (int j = 1; j < a[i].length; j++)
-			{
-				if (a[i][j] > 0)
-				{
-					boolean moved = false;
-					int lastFree = -1;
-					int lastEqual = -1;
-					for (int testRow = j - 1; testRow > -1; testRow--)
-					{
-						if (testRow == 0)
-						{
-							if (a[i][testRow] == a[i][j] && (lastFree != -1 || testRow == j - 1))
-							{
-								a[i][testRow] = 2 * a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							} else if (a[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
-							{
-
-								a[i][testRow] = a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							}
-						} else if (a[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1))
-						{
-							lastFree = testRow;
-						} else if (a[i][testRow] == a[i][j] && (lastFree != -1 || testRow == j - 1))
-						{
-							lastEqual = testRow;
-						}
-					}
-					if (!moved)
-					{
-						if (lastFree != -1 && lastEqual == -1)
-						{
-							a[i][lastFree] = a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual < lastFree)
-						{
-							a[i][lastEqual] = 2 * a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else // no move {
-							moved = true;
-					}
-				}
-			}
-		}
-		return a;
-	}
-
-	/**
-	 * scans all columns starting from the second to last moves them to farthest
-	 * available block in that row multiply by 2 as necessary
-	 * 
-	 */
-	public int[][] guessMoveNumbersEast(int[][] a)
-	{
-		for (int i = 0; i < a.length; i++)
-		{
-			for (int j = a[i].length - 2; j > -1; j--)
-			{
-				if (a[i][j] > 0)
-				{
-					boolean moved = false;
-					int lastFree = -1;
-					int lastEqual = -1;
-					for (int testRow = j + 1; testRow < a.length; testRow++)
-					{
-						if (testRow == 3)
-						{
-							if (a[i][testRow] == a[i][j] && (lastFree != -1 || testRow == j + 1))
-							{
-								a[i][testRow] = 2 * a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							} else if (a[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
-							{
-
-								a[i][testRow] = a[i][j];
-								a[i][j] = 0;
-								moved = true;
-							}
-						} else if (a[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1))
-						{
-							lastFree = testRow;
-						} else if (a[i][testRow] == a[i][j] && (lastFree != -1 || testRow == j + 1))
-						{
-							lastEqual = testRow;
-						}
-					}
-					if (!moved)
-					{
-						if (lastFree != -1 && lastEqual == -1)
-						{
-							a[i][lastFree] = a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else if (lastFree != -1 && lastEqual > lastFree)
-						{
-							a[i][lastEqual] = 2 * a[i][j];
-							a[i][j] = 0;
-							moved = true;
-						} else
-						{
-							moved = true;
-						}
-					}
-				}
-			}
-		}
-		return a;
-	}
-
-	
+		
 	/**
 	 * This returns a value that is related to the numbers on the board and the amount of free space.
 	 * Since the total value of all the non-zero numbers increases by two every turn, I needed some other way to 

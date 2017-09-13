@@ -213,7 +213,7 @@ public class GameBoard {
                         if (testRow == 0) {
                             if (playArea[i][testRow] == playArea[i][j]
                                     && (lastFree == lastEqual + 1 || testRow == j + 1) && !multiplied[i][testRow]) {
-                                playArea[i][testRow] = 2 * playArea[i][j];
+                                playArea[i][0] = 2 * playArea[i][j];
                                 playArea[i][j] = 0;
                                 multiplied[i][testRow] = true;
                                 moved = true;
@@ -226,7 +226,7 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ((lastEqual > -1 && lastEqual > lastFree) || (lastEqual > -1) && !multiplied[lastEqual][j]) {
+                        if (((lastEqual > -1 && lastEqual > lastFree) || (lastEqual > -1)) && !multiplied[i][lastEqual]) {
                             playArea[i][lastEqual] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[i][lastEqual] = true;

@@ -163,7 +163,7 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if (lastFree != -1 && lastEqual < lastFree && lastEqual > -1 && !multiplied[lastEqual][j]) {
+                        if ( (lastFree != -1 && lastEqual < lastFree) || (lastEqual > -1) && !multiplied[lastEqual][j]) {
                             playArea[lastEqual][j] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[lastEqual][j] = true;
@@ -203,7 +203,7 @@ public class GameBoard {
                         if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1)) {
                             lastFree = testRow;
                         } else if (playArea[i][testRow] == playArea[i][j]
-                                && ((lastFree != -1 && clear) || testRow == j + 1)) {
+                                && ((lastFree != -1 && clear) || testRow == j - 1)) {
                             lastEqual = testRow;
                         }
                         if (testRow == 0) {
@@ -222,7 +222,7 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if (lastFree != -1 && lastEqual < lastFree && lastEqual > -1 && !multiplied[i][lastEqual]) {
+                        if ((lastFree != -1 && lastEqual > lastFree) || (lastEqual > - 1) && !multiplied[lastEqual][j]) {
                             playArea[i][lastEqual] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[i][lastEqual] = true;

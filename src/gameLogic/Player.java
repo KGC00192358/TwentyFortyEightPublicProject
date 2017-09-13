@@ -139,7 +139,7 @@ public class Player {
         if (countSameMaxValues(vals) < 4 && countSameMaxValues(vals) > 1) {
             Collections.sort(vals);
             Random r = new Random();
-            int low = vals.size() - countSameMaxValues(vals) - 1;
+            int low = vals.size() - countSameMaxValues(vals);
             int high = vals.size() - 1;
             return (r.nextInt(high - low) + low) * 6;
 

@@ -514,12 +514,12 @@ public class GameBoardTest
 	public void stillWeirdBugsForFullLine(){
 		GameBoard b = new GameBoard();
 		b.clearBoard();
-		b.setPlayArea(3, 0, 2);
-		b.setPlayArea(3, 2, 2);
-		b.setPlayArea(3, 3, 4);
+		b.setPlayArea(0, 2, 16);
+		b.setPlayArea(1, 2, 2);
+		b.setPlayArea(2, 2, 2);
 		System.out.println("init");
 		b.printBoard();
-		b.moveNumbersWest();
+		b.moveNumbersSouth();
 		System.out.println("final");
 		b.printBoard();
 		

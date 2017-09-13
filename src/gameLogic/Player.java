@@ -15,12 +15,13 @@ import java.util.Random;
 
 public class Player {
     private ArrayList<String> lines = new ArrayList<String>();
-    private  GameBoard b = new GameBoard();
+    private GameBoard b = new GameBoard();
     private BoardReader br = new BoardReader();
-    
+
     public Player() {
-            
+
     }
+
     public void play() {
         Path file = Paths.get("output.txt");
         boolean won = false;
@@ -72,18 +73,24 @@ public class Player {
                     b.addTwo();
                     break;
                 case 6:
-                    b.moveNumbersEast();
-                    lines.add("right at random");
+                    b.moveNumbersSouth();
+                    lines.add("Down at random");
                     lines.add("\n");
                     b.addTwo();
                     break;
                 case 12:
-                    b.moveNumbersNorth();
-                    lines.add("up at random");
+                    b.moveNumbersEast();
+                    lines.add("Right at random");
                     lines.add("\n");
                     b.addTwo();
                     break;
                 case 18:
+                    b.moveNumbersNorth();
+                    lines.add("Up at random");
+                    lines.add("\n");
+                    b.addTwo();
+                    break;
+                case 24:
                     b.moveNumbersWest();
                     lines.add("Left at random");
                     lines.add("\n");
@@ -113,7 +120,7 @@ public class Player {
         }
     }
 
-    private  int pickMove() {
+    private int pickMove() {
         ArrayList<Integer> vals = new ArrayList<Integer>();
         for (int i = 0; i < 4; i++) {
             switch (i) {
@@ -133,16 +140,15 @@ public class Player {
             vals.add(br.scanExpectedValue(b, i));
 
         }
-        if (countSameMaxValues(vals) == 4) {
-            return 5;
-        }
-        if (countSameMaxValues(vals) < 4 && countSameMaxValues(vals) > 1) {
-            Collections.sort(vals);
+        if (countSameMaxValues(vals) > 1) {
+            ArrayList<Integer> highMoves = findHighMoves(vals, new CompareIntAscending());
             Random r = new Random();
-            int low = vals.size() - countSameMaxValues(vals);
-            int high = vals.size() - 1;
-            return (r.nextInt(high - low) + low) * 6;
-
+            int high = highMoves.size();
+            int index = r.nextInt(high);
+            int move = (highMoves.get(index) + 1) * 6;
+            System.out.println("Index: " + index);
+            System.out.println("Move: " + move);
+            return move;
         }
         Comparator<Integer> c = new CompareIntAscending();
         return max(vals, c);
@@ -191,4 +197,55 @@ public class Player {
         return i;
     }
 
+    public <T> ArrayList<Integer> findHighMoves(Collection<T> coll, Comparator<T> c) {
+        ArrayList<Integer> moves = new ArrayList<Integer>();
+        T target = Collections.max(coll, c);
+        int i = 0;
+        for (T element : coll) {
+            if (element == target) {
+                moves.add(i);
+            }
+            i++;
+        }
+
+        return moves;
+    }
+/*
+    public int pickMove(GameBoard b, BoardReader br) {
+        ArrayList<Integer> vals = new ArrayList<Integer>();
+        for (int i = 0; i < 4; i++) {
+            switch (i) {
+            case 0:
+                System.out.println(("Board Value For Down:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                break;
+            case 1:
+                System.out.println(("Board Value For Right:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                break;
+            case 2:
+                System.out.println(("Board Value For Up:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                break;
+            case 3:
+                System.out.println(("Board Value For Left:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                break;
+            }
+            vals.add(br.scanExpectedValue(b, i));
+
+        }
+        if (countSameMaxValues(vals) == 4) {
+            return 5;
+        }
+        if (countSameMaxValues(vals) < 4 && countSameMaxValues(vals) > 1) {
+            ArrayList<Integer> highMoves = findHighMoves(vals, new CompareIntAscending());
+            Random r = new Random();
+            int high = highMoves.size();
+            int index = r.nextInt(high);
+            int move = (highMoves.get(index) + 1) * 6;
+            System.out.println("Index: " + index);
+            System.out.println("Move: " + move);
+            return move;
+        }
+        Comparator<Integer> c = new CompareIntAscending();
+        return max(vals, c);
+    }
+    */
 }

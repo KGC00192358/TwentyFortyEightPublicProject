@@ -79,14 +79,16 @@ public class GameBoard {
                     int lastEqual = -1;
                     boolean clear = true;
                     for (int testColumn = i + 1; testColumn < playArea.length; testColumn++) {
-                        if (playArea[testColumn][j] != 0 && testColumn < 3) {
-                            clear = false;
-                        }
+                        
                         if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i + 1)) {
                             lastFree = testColumn;
-                        } else if (playArea[testColumn][j] == playArea[i][j]
-                                && (lastFree != -1 || testColumn == i + 1)) {
+                        }
+
+                        if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i + 1)) {
                             lastEqual = testColumn;
+                        }
+                        if (playArea[testColumn][j] != 0 && testColumn < 3) {
+                            clear = false;
                         }
                         if (testColumn == 3) {
                             if (playArea[testColumn][j] == playArea[i][j]
@@ -138,14 +140,15 @@ public class GameBoard {
                     int lastEqual = -1;
                     boolean clear = true;
                     for (int testColumn = i - 1; testColumn > -1; testColumn--) {
-                        if (playArea[testColumn][j] != 0 && testColumn > 0) {
-                            clear = false;
-                        }
+                       
                         if (playArea[testColumn][j] == 0 && (lastFree != -1 || testColumn == i - 1)) {
                             lastFree = testColumn;
-                        } else if (playArea[testColumn][j] == playArea[i][j]
-                                && (lastFree != -1 || testColumn == i - 1)) {
+                        }
+                        if (playArea[testColumn][j] == playArea[i][j] && (lastFree != -1 || testColumn == i - 1)) {
                             lastEqual = testColumn;
+                        }
+                        if (playArea[testColumn][j] != 0 && testColumn > 0) {
+                            clear = false;
                         }
                         if (testColumn == 0) {
                             if (playArea[testColumn][j] == playArea[i][j]
@@ -163,7 +166,7 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ( (lastFree != -1 && lastEqual < lastFree) || (lastEqual > -1) && !multiplied[lastEqual][j]) {
+                        if ((lastEqual > -1 && lastEqual < lastFree) && !multiplied[lastEqual][j]) {
                             playArea[lastEqual][j] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[lastEqual][j] = true;
@@ -197,14 +200,15 @@ public class GameBoard {
                     int lastEqual = -1;
                     boolean clear = true;
                     for (int testRow = j - 1; testRow > -1; testRow--) {
-                        if (playArea[i][testRow] != 0 && testRow > 0) {
-                            clear = false;
-                        }
+  
                         if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j - 1)) {
                             lastFree = testRow;
-                        } else if (playArea[i][testRow] == playArea[i][j]
-                                && ((lastFree != -1 && clear) || testRow == j - 1)) {
+                        }
+                        if (playArea[i][testRow] == playArea[i][j] && ((lastFree != -1 && clear) || testRow == j - 1)) {
                             lastEqual = testRow;
+                        }
+                        if (playArea[i][testRow] != 0 && testRow > 0) {
+                            clear = false;
                         }
                         if (testRow == 0) {
                             if (playArea[i][testRow] == playArea[i][j]
@@ -222,7 +226,7 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ((lastFree != -1 && lastEqual > lastFree) || (lastEqual > - 1) && !multiplied[lastEqual][j]) {
+                        if ((lastEqual > -1 && lastEqual > lastFree) || (lastEqual > -1) && !multiplied[lastEqual][j]) {
                             playArea[i][lastEqual] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[i][lastEqual] = true;
@@ -257,21 +261,21 @@ public class GameBoard {
                     int lastEqual = -1;
                     boolean clear = true;
                     for (int testRow = j + 1; testRow < playArea.length; testRow++) {
-                        if (playArea[i][testRow] != 0 && testRow < 3) {
-                            clear = false;
-                        }
                         if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1)) {
                             lastFree = testRow;
-                        } else if (playArea[i][testRow] == playArea[i][j]
-                                && ((lastFree != -1 && clear) || testRow == j + 1)) {
+                        }
+                        if (playArea[i][testRow] == playArea[i][j] && ((lastFree != -1 && clear) || testRow == j + 1)) {
                             lastEqual = testRow;
+                        }
+                        if (playArea[i][testRow] != 0 && testRow < 3) {
+                            clear = false;
                         }
                         if (testRow == 3) {
                             if (playArea[i][testRow] == playArea[i][j]
                                     && (lastFree == lastEqual + 1 || testRow == j + 1) && !multiplied[i][testRow]) {
                                 playArea[i][testRow] = 2 * playArea[i][j];
                                 playArea[i][j] = 0;
-                                multiplied[i][testRow] = true;
+                                multiplied[i][3] = true;
                                 moved = true;
                             } else if (playArea[i][testRow] == 0 && (lastFree != -1 || testRow == j + 1)) {
 

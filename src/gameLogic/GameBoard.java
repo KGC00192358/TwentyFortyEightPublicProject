@@ -1,6 +1,8 @@
 
 package gameLogic;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -106,8 +108,8 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ((lastFree != -1 && lastEqual > lastFree || lastEqual == i + 1)
-                                && !multiplied[lastEqual][j]) {
+                        if ((lastFree != -1 && lastEqual > lastFree || lastEqual == i + 1) //this implies that there is free space between the equal and the current node, or that they are adjacent
+                                && !multiplied[lastEqual][j]) {                            //and that the equal wasnt made this move
                             playArea[lastEqual][j] = 2 * playArea[i][j];
                             playArea[i][j] = 0;
                             multiplied[lastEqual][j] = true;
@@ -166,8 +168,8 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ((lastEqual > -1 && lastEqual < lastFree) && !multiplied[lastEqual][j]) {
-                            playArea[lastEqual][j] = 2 * playArea[i][j];
+                        if ((lastEqual > -1 && lastEqual < lastFree) && !multiplied[lastEqual][j]) { //this implies that there is free space between the equal and the current node, or that they are adjacent
+                            playArea[lastEqual][j] = 2 * playArea[i][j];                            // and that the equal wasnt made this move
                             playArea[i][j] = 0;
                             multiplied[lastEqual][j] = true;
                             moved = true;
@@ -226,8 +228,8 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if (((lastEqual > -1 && lastEqual > lastFree) || (lastEqual > -1)) && !multiplied[i][lastEqual]) {
-                            playArea[i][lastEqual] = 2 * playArea[i][j];
+                        if (((lastEqual > -1 && lastEqual > lastFree) || (lastEqual > -1)) && !multiplied[i][lastEqual]) { //this implies that there is free space between the equal and the current node, or that they are adjacent
+                            playArea[i][lastEqual] = 2 * playArea[i][j];                                                   // and that the equal wasnt made this move
                             playArea[i][j] = 0;
                             multiplied[i][lastEqual] = true;
                             moved = true;
@@ -286,8 +288,8 @@ public class GameBoard {
                         }
                     }
                     if (!moved) {
-                        if ((lastFree != -1 && lastEqual > lastFree || lastEqual == j + 1)
-                                && !multiplied[i][lastEqual]) {
+                        if ((lastFree != -1 && lastEqual > lastFree || lastEqual == j + 1) //this implies that there is free space between the equal and the current node, or that they are adjacent
+                                && !multiplied[i][lastEqual]) {                            // and that the equal wasnt made this move
                             playArea[i][lastEqual] = 2 * playArea[i][j];
                             multiplied[i][lastEqual] = true;
                             playArea[i][j] = 0;
@@ -361,7 +363,18 @@ public class GameBoard {
             }
         }
     }
-
+    public Map<Integer, Integer> mapBoard() {
+        Map<Integer, Integer> boardMap = new HashMap<Integer, Integer>();
+        int key = 0;
+        for (int i = 0; i < playArea.length; i++) {
+            for (int j = 0; j < playArea[i].length; j++) {
+                boardMap.put(key, playArea[i][j]);
+                key++;
+            }
+        }
+        return boardMap;
+        
+    }
     /**
      * Checks for win/lose conditions
      * 

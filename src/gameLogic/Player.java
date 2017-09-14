@@ -26,7 +26,7 @@ public class Player {
         Path file = Paths.get("output.txt");
         boolean won = false;
         int pass = 1;
-        while (!won && pass < 101) {
+        while (!won && pass < 10001) {
             b.clearBoard();
             b.addTwo();
             lines.add("Game no: " + pass);
@@ -125,16 +125,20 @@ public class Player {
         for (int i = 0; i < 4; i++) {
             switch (i) {
             case 0:
-                lines.add(("Board Value For Down:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                // lines.add(("Board Value For Down: " +
+                // Integer.toString(br.scanExpectedValue(b, i))));
                 break;
             case 1:
-                lines.add(("Board Value For Right:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                // lines.add(("Board Value For Right: " +
+                // Integer.toString(br.scanExpectedValue(b, i))));
                 break;
             case 2:
-                lines.add(("Board Value For Up:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                // lines.add(("Board Value For Up: " +
+                // Integer.toString(br.scanExpectedValue(b, i))));
                 break;
             case 3:
-                lines.add(("Board Value For Left:  " + Integer.toString(br.scanExpectedValue(b, i))));
+                // lines.add(("Board Value For Left: " +
+                // Integer.toString(br.scanExpectedValue(b, i))));
                 break;
             }
             vals.add(br.scanExpectedValue(b, i));
@@ -210,42 +214,10 @@ public class Player {
 
         return moves;
     }
-/*
-    public int pickMove(GameBoard b, BoardReader br) {
-        ArrayList<Integer> vals = new ArrayList<Integer>();
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-            case 0:
-                System.out.println(("Board Value For Down:  " + Integer.toString(br.scanExpectedValue(b, i))));
-                break;
-            case 1:
-                System.out.println(("Board Value For Right:  " + Integer.toString(br.scanExpectedValue(b, i))));
-                break;
-            case 2:
-                System.out.println(("Board Value For Up:  " + Integer.toString(br.scanExpectedValue(b, i))));
-                break;
-            case 3:
-                System.out.println(("Board Value For Left:  " + Integer.toString(br.scanExpectedValue(b, i))));
-                break;
-            }
-            vals.add(br.scanExpectedValue(b, i));
 
-        }
-        if (countSameMaxValues(vals) == 4) {
-            return 5;
-        }
-        if (countSameMaxValues(vals) < 4 && countSameMaxValues(vals) > 1) {
-            ArrayList<Integer> highMoves = findHighMoves(vals, new CompareIntAscending());
-            Random r = new Random();
-            int high = highMoves.size();
-            int index = r.nextInt(high);
-            int move = (highMoves.get(index) + 1) * 6;
-            System.out.println("Index: " + index);
-            System.out.println("Move: " + move);
-            return move;
-        }
-        Comparator<Integer> c = new CompareIntAscending();
-        return max(vals, c);
+    public ArrayList<Integer> aStarSearchForMove(GameBoard b, int comboTarget) {
+        ArrayList<Integer> moveList = new ArrayList<Integer>();
+
+        return moveList;
     }
-    */
 }

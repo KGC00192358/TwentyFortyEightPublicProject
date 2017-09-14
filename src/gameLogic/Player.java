@@ -214,7 +214,13 @@ public class Player {
 
         return moves;
     }
-
+/**
+ * This is a method for finding the best possible path(read list of moves) to combo an element with another one of the same kind.
+ * It is a modified version of the A* algorithm.
+ * @param b the gameboard we are currently using();
+ * @param comboTarget the number we want to combine
+ * @return an arraylist containing the list of moves used to combine these two numbers.
+ */
     public ArrayList<Integer> aStarSearchForMove(GameBoard b, int comboTarget) {
         ArrayList<Integer> moveList = new ArrayList<Integer>();
 
